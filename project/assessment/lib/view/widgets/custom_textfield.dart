@@ -1,3 +1,4 @@
+import 'package:assessment/view/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -19,18 +20,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       textAlignVertical: TextAlignVertical.center,
       key: formKey,
+      style: defaultTextfieldStyle,
       decoration: InputDecoration(
-          isCollapsed: true,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.white)),
+          isCollapsed: true,
           hintText: widget.hint,
           fillColor: Colors.white,
-          hintStyle: TextStyle(
-            color: Colors.grey,
-          ),
+          hintStyle: defaultTextfieldStyle.copyWith(color: Colors.grey),
           filled: true,
-          contentPadding: EdgeInsets.all(16)),
+          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
     );
   }
 }

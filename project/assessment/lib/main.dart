@@ -1,4 +1,7 @@
 import 'package:assessment/view/screens/first_screen/first_screen.dart';
+import 'package:assessment/view/screens/second_screen/second_screen.dart';
+import 'package:assessment/view/screens/third_screen/third_screen.dart';
+import 'package:assessment/view/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,8 +19,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Suitmedia Assessment',
       theme: ThemeData(
+        appBarTheme: defaultAppBarTheme,
         textTheme: GoogleFonts.poppinsTextTheme(),
-        primaryColor: Color(0xFF2B637B)),
+        backgroundColor: Colors.white,
+      ),
       home: const FirstScreen(),
     );
   }

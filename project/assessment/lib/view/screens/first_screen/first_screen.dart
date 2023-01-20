@@ -1,5 +1,7 @@
+import 'package:assessment/view/screens/second_screen/second_screen.dart';
 import 'package:assessment/view/widgets/custom_button.dart';
 import 'package:assessment/view/widgets/custom_textfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -28,25 +30,45 @@ class _FirstScreenState extends State<FirstScreen> {
           Center(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-              child: ListView(
-                shrinkWrap: true,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  Spacer(
+                    flex: 10,
+                  ),
                   SizedBox(
                     height: 120,
                     width: 120,
                     child: CircleAvatar(),
                   ),
+                  Spacer(
+                    flex: 4,
+                  ),
                   CustomTextField(
                     hint: 'Name',
                   ),
+                  Spacer(),
                   CustomTextField(
                     hint: 'Palindrome',
+                  ),
+                  Spacer(
+                    flex: 3,
                   ),
                   CustomButton(
                     text: 'CHECK',
                   ),
+                  Spacer(),
                   CustomButton(
                     text: 'NEXT',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                              builder: (context) => SecondScreen()));
+                    },
+                  ),
+                  Spacer(
+                    flex: 10,
                   ),
                 ],
               ),
