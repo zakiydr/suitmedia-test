@@ -1,4 +1,4 @@
-import 'package:assessment/view/styles/styles.dart';
+import 'package:assessment/view/screens/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
