@@ -14,9 +14,41 @@ class ThirdScreen extends StatefulWidget {
 }
 
 class _ThirdScreenState extends State<ThirdScreen> {
+  final scrollController = ScrollController();
+  int page = 1;
+  int? totalPages;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    scrollController.addListener(
+      () {
+        if (scrollController.offset >=
+                scrollController.position.maxScrollExtent &&
+            !scrollController.position.outOfRange) {
+          if (page < totalPages!) {
+            page++;
+            ReqresAPI().fetchData(page);
+          }
+        }
+      },
+    );
+    super.initState();
+  }
+
+  void _scrollListener() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      page++;
+      ReqresAPI().fetchData(page);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userViewModel = Provider.of<UserViewModel>(context).data;
+    final userViewModel = Provider.of<UserViewModel>(context);
+    int? perPage = userViewModel.data?.perPage;
+    int? totalPages = userViewModel.data?.totalPages;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -25,65 +57,48 @@ class _ThirdScreenState extends State<ThirdScreen> {
         ),
       ),
       body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: FutureBuilder(
-            future: ReqresAPI().fetchData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.separated(
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        onTap: () {
-                          int? id = snapshot.data?.data?[index].id;
-                          Navigator.pop(
-                              context, id);
-                        },
-                        leading: CircleAvatar(
-                          foregroundImage: NetworkImage(
-                              '${snapshot.data!.data![index].avatar}'),
-                          radius: 25,
-                          backgroundColor: Colors.blue,
-                        ),
-                        title: Text(
-                            '${snapshot.data!.data![index].firstName} ${snapshot.data!.data![index].lastName}'),
-                        subtitle: Text('${snapshot.data!.data![index].email}'),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        height: 5,
-                        color: Colors.grey,
-                      );
-                    },
-                    itemCount: snapshot.data!.data!.length);
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          )
-          // ListView.separated(
-          //     itemBuilder: (context, index) {
-          //       return ListTile(
-          //         leading: CircleAvatar(
-          //           radius: 25,
-          //           backgroundColor: Colors.blue,
-          //           child: Text('A'),
-          //         ),
-          //         title: Text(
-          //             '${userViewModel!.data![index].firstName + userViewModel!.data[index].lastName!}'),
-          //         subtitle: Text('Email'),
-          //       );
-          //     },
-          //     separatorBuilder: (context, index) {
-          //       return Divider(
-          //         height: 5,
-          //         color: Colors.grey,
-          //       );
-          //     },
-          //     itemCount: userViewModel.data!.tot al!),
-          ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: FutureBuilder(
+          future: ReqresAPI().fetchData(page),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.separated(
+                  shrinkWrap: false,
+                  physics: ClampingScrollPhysics(),
+                  controller: scrollController,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () async {
+                        int id = snapshot.data!.data![index].id ?? 6;
+                        userViewModel.getDataById(id);
+                        Navigator.pop(context);
+                      },
+                      leading: CircleAvatar(
+                        foregroundImage: NetworkImage(
+                            '${snapshot.data!.data![index].avatar}'),
+                        radius: 25,
+                        backgroundColor: Colors.blue,
+                      ),
+                      title: Text(
+                          '${snapshot.data!.data![index].firstName} ${snapshot.data!.data![index].lastName}'),
+                      subtitle: Text('${snapshot.data!.data![index].email}'),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      height: 5,
+                      color: Colors.grey,
+                    );
+                  },
+                  itemCount: snapshot.data!.data!.length);
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SecondScreen extends StatefulWidget {
   const SecondScreen({super.key});
@@ -17,8 +18,13 @@ class SecondScreen extends StatefulWidget {
 
 class _SecondScreenState extends State<SecondScreen> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final userViewModel = Provider.of<UserViewModel>(context).data;
+    final userViewModel = Provider.of<UserViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Second Screen', style: title),
@@ -39,17 +45,24 @@ class _SecondScreenState extends State<SecondScreen> {
                       'Welcome',
                       style: body1,
                     ),
-                    Text(
-                      'John Doe',
-                      style: h1,
-                    ),
+                    FutureBuilder(
+                      future: SharedPreferences.getInstance(),
+                      builder: (context, snapshot) {
+                        return Text(
+                          snapshot.data?.getString('name') ?? 'Name',
+                          style: h1,
+                        );
+                      },
+                    )
                   ],
                 ),
               ],
             ),
             Center(
               child: Text(
-                '',
+                userViewModel.dataById == null
+                    ? 'No User Selected'
+                    : '${userViewModel.dataById?.data?.firstName} ${userViewModel.dataById?.data?.lastName}',
                 style: mainText,
               ),
             ),

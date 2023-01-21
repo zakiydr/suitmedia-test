@@ -29,7 +29,7 @@ ButtonStyle get defaultButtonStyle => ElevatedButton.styleFrom(
       fixedSize: Size.fromHeight(41),
     );
 
-TextStyle get defaultButtonTextStyle => const TextStyle(
+TextStyle get buttonTextStyle => const TextStyle(
       color: Colors.white,
       fontSize: 14,
       fontWeight: FontWeight.w500,

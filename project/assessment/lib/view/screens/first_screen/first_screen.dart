@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FirstScreen extends StatefulWidget {
   const FirstScreen({super.key});
@@ -16,6 +17,7 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
+
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -42,10 +44,14 @@ class _FirstScreenState extends State<FirstScreen> {
                     Spacer(
                       flex: 10,
                     ),
-                    SizedBox(
+                    Container(
                       height: 120,
                       width: 120,
-                      child: CircleAvatar(),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        backgroundImage:
+                            AssetImage('assets/images/ic_photo.png'),
+                      ),
                     ),
                     Spacer(
                       flex: 4,
@@ -77,12 +83,17 @@ class _FirstScreenState extends State<FirstScreen> {
                           builder: (context) {
                             return AlertDialog(
                               title: Text(
-                                'Palindrome',
+                                'Palindrome Check',
                                 style: title,
                               ),
-                              content: Text(original == reversed
-                                  ? 'The text is Palindrome'
-                                  : 'The text is not Palindrome'),
+                              content: Text(original.isEmpty
+                                  ? 'Text is empty'
+                                  : original == reversed
+                                      ? 'The text is Palindrome'
+                                      : 'The text is not Palindrome'),
+                              // Text(original == reversed
+                              //     ? 'The text is Palindrome'
+                              //     : 'The text is not Palindrome'),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
@@ -97,7 +108,10 @@ class _FirstScreenState extends State<FirstScreen> {
                     Spacer(),
                     CustomButton(
                       text: 'NEXT',
-                      onPressed: () {
+                      onPressed: () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setString('name', nameController.text);
                         Navigator.push(
                             context,
                             CupertinoPageRoute(
